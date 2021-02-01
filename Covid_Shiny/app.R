@@ -34,7 +34,10 @@ ui <- fluidPage(
     sidebarLayout(
         sidebarPanel(
             selectInput(inputId = 'mycontinent', label = "continent", choices = c("Europe", "Asia")),
-            dateInput(inputId = 'mydate', label = "date"),
+            sliderInput(inputId = 'mydate', label = "date", 
+                        min = as.Date("2020-01-22", "%Y-%m-%d"),
+                        max = Sys.Date()-1,
+                        value = Sys.Date()-1),
         ),
         
     mainPanel(
@@ -52,9 +55,10 @@ server <- function(input, output) {
         mutate_if(is.numeric, ~replace(., is.na(.), 0)) %>%
         filter(continent == input$mycontinent) %>%
         filter(date == input$mydate) %>% 
-        ggplot(aes(total_cases, location))+
+        ggplot(aes(total_cases, reorder(location, total_cases)))+
         geom_bar(stat = "identity")+
-            scale_x_continuous()
+            scale_x_continuous(labels = function(x) format(x, scientific = FALSE)) +
+            labs(x = "Total Cases", y = " ")
     })
    
 }
