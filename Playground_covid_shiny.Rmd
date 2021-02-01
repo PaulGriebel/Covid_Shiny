@@ -1,0 +1,37 @@
+---
+title: "Covid_Shiny_Base"
+author: "Paul Griebel"
+date: "31 1 2021"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+
+```
+
+```{r}
+our_world_in_data <- read_csv(
+  file = "https://covid.ourworldindata.org/data/owid-covid-data.csv", 
+  col_types = cols(
+    .default = col_double(),
+    iso_code = col_character(),
+    continent = col_character(),
+    location = col_character(),
+    date = col_date(),
+    tests_units = col_character()
+  )
+) 
+
+head(our_world_in_data)
+```
+
+```{r}
+our_world_in_data %>% 
+  select(c(date, continent, location, total_cases, total_deaths)) %>% 
+  mutate_if(is.numeric, ~replace(., is.na(.), 0)) %>%
+  view()
+
+```
+
+
