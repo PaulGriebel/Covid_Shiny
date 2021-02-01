@@ -10,6 +10,7 @@
 library(shiny)
 library(tidyverse)
 library(shinythemes)
+theme_set(theme_minimal())
 
 
 our_world_in_data <- read_csv(
@@ -89,10 +90,10 @@ server <- function(input, output) {
         filter(date == input$mydate) %>% 
         ggplot(aes(total_cases, reorder(location, total_cases),
                    fill = ifelse(total_cases == max(total_cases), "highlighted", "normal")))+
-        geom_bar(stat = "identity")+
+        geom_bar(stat = "identity", width = 0.6)+
             scale_x_continuous(labels = function(x) format(x, scientific = FALSE)) +
             labs(x = "Total Cases", y = " ") +
-            theme(legend.position = "none") 
+                theme(legend.position = "none") 
     })
     
     output$Cases_100k <- renderPlot({
@@ -104,7 +105,7 @@ server <- function(input, output) {
             filter(date == input$mydate) %>% 
             ggplot(aes(total_cases_per_100k, reorder(location, total_cases_per_100k),
                        fill = ifelse(total_cases_per_100k == max(total_cases_per_100k), "highlighted", "normal")))+
-            geom_bar(stat = "identity")+
+            geom_bar(stat = "identity", width = 0.6)+
             scale_x_continuous(labels = function(x) format(x, scientific = FALSE)) +
             labs(x = "Total Cases / 100.000", y = " ") +
             theme(legend.position = "none") 
@@ -119,7 +120,8 @@ server <- function(input, output) {
             filter(date == input$mydate2) %>% 
             ggplot(aes(total_deaths, reorder(location, total_deaths),
                        fill = ifelse(total_deaths == max(total_deaths), "highlighted", "normal")))+
-            geom_bar(stat = "identity")+
+            geom_bar(stat = "identity", width = 0.6)+
+            scale_fill_manual(name = "total_deaths", values=c("red","lightsalmon")) +
             scale_x_continuous(labels = function(x) format(x, scientific = FALSE)) +
             labs(x = "Total Deaths", y = " ") +
             theme(legend.position = "none") 
@@ -134,7 +136,8 @@ server <- function(input, output) {
             filter(date == input$mydate2) %>% 
             ggplot(aes(total_deaths_per_100k, reorder(location, total_deaths_per_100k),
                        fill = ifelse(total_deaths_per_100k == max(total_deaths_per_100k), "highlighted", "normal")))+
-            geom_bar(stat = "identity")+
+            geom_bar(stat = "identity", width = 0.6)+
+            scale_fill_manual(name = "total_deaths_per_100k", values=c("red","lightsalmon")) +
             scale_x_continuous(labels = function(x) format(x, scientific = FALSE)) +
             labs(x = "Total Deaths / 100.000", y = " ") +
             theme(legend.position = "none") 
